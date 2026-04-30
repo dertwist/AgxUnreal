@@ -1,0 +1,24 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "AgX Tonemap Switcher",
+	"Description": "Allows switching between stock and AgX tonemapper CombineLUTs shaders.",
+	"Category": "Rendering",
+	"CreatedBy": "Twist",
+	"CreatedByURL": "",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"CanContainContent": false,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "AgxTonemapSwitcher",
+			"Type": "Editor",
+			"LoadingPhase": "Default"
+		}
+	]
+}
