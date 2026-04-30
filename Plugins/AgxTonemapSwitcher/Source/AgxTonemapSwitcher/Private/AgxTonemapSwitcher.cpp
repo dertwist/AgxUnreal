@@ -6,21 +6,25 @@
 #include "Misc/MessageDialog.h"
 #include "Misc/Paths.h"
 #include "Interfaces/IPluginManager.h"
+#include "AgxTonemapSwitcherStyle.h"
+
 
 #define LOCTEXT_NAMESPACE "FAgxTonemapSwitcherModule"
 
 DEFINE_LOG_CATEGORY(LogAgxTonemapSwitcher);
 
-static const FName AgxPluginName = TEXT("AgxTonemapSwitcher");
-
 void FAgxTonemapSwitcherModule::StartupModule()
 {
+	FAgxTonemapSwitcherStyle::Initialize();
+	FAgxTonemapSwitcherStyle::ReloadTextures();
+
 	UToolMenus::RegisterStartupCallback(FSimpleMulticastDelegate::FDelegate::CreateRaw(this, &FAgxTonemapSwitcherModule::RegisterMenus));
 }
 
 void FAgxTonemapSwitcherModule::ShutdownModule()
 {
 	UToolMenus::UnRegisterStartupCallback(this);
+	FAgxTonemapSwitcherStyle::Shutdown();
 }
 
 void FAgxTonemapSwitcherModule::RegisterMenus()
@@ -54,7 +58,7 @@ void FAgxTonemapSwitcherModule::RegisterMenus()
 
 	// Register Toolbar Button
 	{
-		UToolMenu* ToolbarMenu = UToolMenus::Get()->ExtendMenu("LevelEditor.LevelEditorToolBar.PlayToolBar");
+		UToolMenu* ToolbarMenu = UToolMenus::Get()->ExtendMenu("LevelEditor.LevelEditorToolBar");
 		if (ToolbarMenu)
 		{
 			FToolMenuSection& Section = ToolbarMenu->FindOrAddSection("PluginTools");
@@ -88,7 +92,7 @@ void FAgxTonemapSwitcherModule::RegisterMenus()
 				}),
 				LOCTEXT("AgxTonemap", "AgX Tonemap"),
 				LOCTEXT("AgxTonemapTooltip", "AgX Tonemap Switching Tools"),
-				FSlateIcon(FAppStyle::GetAppStyleSetName(), "EditorViewport.Visualizers")
+				FSlateIcon(FAgxTonemapSwitcherStyle::GetStyleSetName(), "AgxTonemapSwitcher.Icon")
 			));
 		}
 	}
@@ -107,7 +111,7 @@ void FAgxTonemapSwitcherModule::OnEnableAgx()
 
 	if (CopyShaderFile(SourceFileName, true))
 	{
-		FMessageDialog::Open(EAppMsgType::Ok, FText::Format(LOCTEXT("AgxEnabled", "AgX CombineLUTs ({0}) enabled successfully.\n\nPlease restart the editor to rebuild shaders."), FText::FromString(VersionStr)));
+		FMessageDialog::Open(EAppMsgType::Ok, LOCTEXT("AgxEnabled", "Shader file replaced successfully.\n\nRestart editor to rebuild shaders."));
 	}
 }
 
@@ -129,7 +133,7 @@ void FAgxTonemapSwitcherModule::OnRestoreOriginal()
 	{
 		if (FileManager.Copy(*TargetFilePath, *BackupFilePath, true) == COPY_OK)
 		{
-			FMessageDialog::Open(EAppMsgType::Ok, LOCTEXT("OriginalRestoredFromBak", "Original shader restored from backup (.agx_backup) successfully.\n\nPlease restart the editor to rebuild shaders."));
+			FMessageDialog::Open(EAppMsgType::Ok, LOCTEXT("OriginalRestoredFromBak", "Shader file replaced successfully (from backup).\n\nRestart editor to rebuild shaders."));
 			return;
 		}
 		else
@@ -144,7 +148,7 @@ void FAgxTonemapSwitcherModule::OnRestoreOriginal()
 
 	if (CopyShaderFile(SourceFileName, false))
 	{
-		FMessageDialog::Open(EAppMsgType::Ok, FText::Format(LOCTEXT("OriginalRestored", "Original CombineLUTs ({0}) restored from plugin resources successfully.\n\nPlease restart the editor to rebuild shaders."), FText::FromString(VersionStr)));
+		FMessageDialog::Open(EAppMsgType::Ok, LOCTEXT("OriginalRestored", "Shader file replaced successfully (from resources).\n\nRestart editor to rebuild shaders."));
 	}
 }
 

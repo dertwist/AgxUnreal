@@ -22,3 +22,6 @@ private:
 	bool CopyShaderFile(const FString& SourceName, bool bIsAgx);
 };
 
+DECLARE_LOG_CATEGORY_EXTERN(LogAgxTonemapSwitcher, Log, All);
+static const FName AgxPluginName = TEXT("AgxTonemapSwitcher");
+
