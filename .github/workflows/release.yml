@@ -23,18 +23,18 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "Detected version: $VERSION"
 
-      - name: Package Plugin
+      - name: Package Plugin (Source Only)
         run: |
           PLUGIN_NAME="AgxTonemapSwitcher"
           RELEASE_DIR="release/${PLUGIN_NAME}"
           mkdir -p ${RELEASE_DIR}
           
-          # Copy only necessary files
+          # Copy source and resources
           cp -r Plugins/${PLUGIN_NAME}/Source ${RELEASE_DIR}/
           cp -r Plugins/${PLUGIN_NAME}/Resources ${RELEASE_DIR}/
           cp Plugins/${PLUGIN_NAME}/${PLUGIN_NAME}.uplugin ${RELEASE_DIR}/
           
-          # Clean up unnecessary files if any
+          # Clean up unnecessary files
           find ${RELEASE_DIR} -name ".DS_Store" -delete
           
           # Create zip
@@ -49,6 +49,13 @@ jobs:
           tag_name: ${{ github.ref_name }}
           generate_release_notes: true
           body: |
+            ### Installation
+            1. Download the `AgxTonemapSwitcher-${{ steps.get_version.outputs.version }}.zip` below.
+            2. Extract it into your project's `Plugins` folder.
+            3. Restart the Unreal Editor. 
+            
+            *Note: As this is a source-only release, the editor will prompt you to rebuild the plugin on the first launch.*
+            
             ### Supported Versions
             - Unreal Engine 5.4, 5.5, 5.6, 5.7
           draft: false
