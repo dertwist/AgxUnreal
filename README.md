@@ -10,7 +10,7 @@ This plugin allows developers to toggle between the standard Unreal Engine tonem
 ## Features
 - Support for UE 5.4, 5.5, 5.6, and 5.7.
 - One-click Enable/Restore via Tools menu or Toolbar.
-- Automatic engine shader backup (.bak).
+- Automatic engine shader backup (.agx_backup).
 - Self-contained with all necessary shader variants.
 
 ## Installation

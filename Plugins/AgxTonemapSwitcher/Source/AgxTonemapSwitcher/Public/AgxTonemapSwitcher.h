@@ -3,6 +3,8 @@
 #include "CoreMinimal.h"
 #include "Modules/ModuleManager.h"
 
+DECLARE_LOG_CATEGORY_EXTERN(LogAgxTonemapSwitcher, Log, All);
+
 class FAgxTonemapSwitcherModule : public IModuleInterface
 {
 public:
@@ -19,3 +21,4 @@ private:
 	void RegisterMenus();
 	bool CopyShaderFile(const FString& SourceName, bool bIsAgx);
 };
+
